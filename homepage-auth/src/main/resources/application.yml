@@ -1,0 +1,3 @@
+auth:
+  jwt:
+    secret: testEncCrinityDglee!QA2ws
