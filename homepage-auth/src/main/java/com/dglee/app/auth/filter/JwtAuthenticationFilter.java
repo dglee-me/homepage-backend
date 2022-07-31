@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String getTokenFromRequest(HttpServletRequest request) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(token.isBlank() || token.startsWith(TOKEN_PREFIX)) {
+        if(!StringUtils.hasText(token) || token.startsWith(TOKEN_PREFIX)) {
             return null;
         }
 

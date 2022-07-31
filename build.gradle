@@ -40,6 +40,7 @@ subprojects {
 
         // Lombok
         compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
 
         // TEST with JUnit
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
@@ -48,5 +49,21 @@ subprojects {
 
     test {
         useJUnitPlatform()
+    }
+}
+
+project(':homepage-auth') {
+    dependencies {
+        // MySQL
+        implementation 'mysql:mysql-connector-java'
+
+        // JWT
+        implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    }
+}
+
+project(':homepage-user') {
+    dependencies {
+        implementation project(':homepage-auth')
     }
 }

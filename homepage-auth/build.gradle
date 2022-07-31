@@ -1,14 +1,14 @@
 bootJar {
-    enabled = true
+    enabled = false
 }
 
 jar {
-    enabled = false
+    enabled = true
 }
 
 group 'com.dglee'
 version '0.0.1-SNAPSHOT'
 
 dependencies {
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+
 }

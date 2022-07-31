@@ -1,8 +1,11 @@
 package com.dglee.app.user.entity;
 
-import com.dglee.app.user.enums.UserRole;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -11,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity(name = "user")
 @Builder
@@ -38,29 +42,35 @@ public class User implements UserDetails {
     /**
      * 권한
      */
-    @ElementCollection
-    @Enumerated(EnumType.ORDINAL)
-    @Convert(converter = UserRole.class)        
-    Collection<? extends GrantedAuthority> authorities;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    List<String> roles = new ArrayList<>();
 
     @NotNull
+    @Column (name = "createdDate")
     @Builder.Default
     Long createdDate = 0L;
 
     @NotNull
+    @Column (name = "expiredDate")
     @Builder.Default
     Long expiredDate = 0L;
 
     @NotNull
+    @Column (name = "lastLogonDate")
     @Builder.Default
     Long lastLogonDate = 0L;
 
     @NotNull
+    @Column(name = "status")
     String status;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return this.roles
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override

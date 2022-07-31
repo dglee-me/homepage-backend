@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: prod
+  datasource:
+    hikari:
+      auto-commit: true
+      connection-test-query: SELECT 1
+      idle-timeout: 10000
+      maximum-pool-size: 10
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: off
+
+
+server:
+  port: 8080
+  encoding: UTF-8
+  enabled: true

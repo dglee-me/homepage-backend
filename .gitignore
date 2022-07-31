@@ -6,3 +6,5 @@
 *.ipr
 
 build/
+
+**/application-prod.yml

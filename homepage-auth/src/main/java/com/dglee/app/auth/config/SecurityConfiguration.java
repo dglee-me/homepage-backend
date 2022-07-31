@@ -18,10 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -30,17 +26,14 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-            .and()
-                .authorizeRequests()
-                    .antMatchers("/login").permitAll()
+        http.authorizeRequests()
+                    .antMatchers("/").permitAll()
+                    .antMatchers("/user/login").permitAll()
                     .anyRequest().authenticated()
             .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 비활성화
             .and()
-                .httpBasic().disable() // 로그인 폼 비활성화
+                .httpBasic().disable()
                 .cors().disable(); // Cross-Site request Forgery 비활성화
 
         http.addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

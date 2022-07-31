@@ -1,7 +1,6 @@
 package com.dglee.app.auth.provider;
 
 import com.dglee.app.user.entity.User;
-import com.dglee.app.user.enums.UserRole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -10,16 +9,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,7 +26,7 @@ public class JwtTokenProvider {
     private static String SECRET_KEY;
 
     public static String generateToken(Authentication authentication) {
-        
+
         // 권한
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -71,19 +66,13 @@ public class JwtTokenProvider {
             throw new IllegalArgumentException("권한 정보가 없습니다.");
         }
 
-        // Claim으로부터 권한 정보 GET
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(CLAIM_AUTH).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-
 
         UserDetails principal = User.builder()
                                     .email((String) claims.get("subject"))
-                                    .authorities(authorities)
+                                    .roles(null)
                                     .build();
 
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, "", null);
     }
 
     private static Claims parseClaim(String accessToken) {

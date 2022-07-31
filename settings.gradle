@@ -1,2 +1,3 @@
 rootProject.name = 'homepage'
 include 'homepage-auth'
+include 'homepage-user'
